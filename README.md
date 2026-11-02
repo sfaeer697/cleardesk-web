@@ -9,6 +9,8 @@ This repository is **public**. The desktop app source lives in the private
 Actions and published to this repository's **Releases**, so buyers can download
 without access to the source.
 
+Working through the launch? Follow [`LAUNCH.md`](LAUNCH.md).
+
 ```
 cleardesk-site/
 ├─ public/              The website (index.html, styles.css, site.js, thanks.html, img/)
