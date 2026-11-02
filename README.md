@@ -1,12 +1,19 @@
 # ClearDesk website
 
-One-page landing site with live launch pricing and Lemon Squeezy checkout.
-Plain HTML/CSS/JS plus two Vercel Functions. There's no build step and no dependencies,
-and the free Vercel Hobby plan is enough.
+One-page landing site with live launch pricing, Lemon Squeezy checkout and
+public installer downloads. Plain HTML/CSS/JS plus two Vercel Functions. No
+build step and no dependencies.
+
+This repository is **public**. The desktop app source lives in the private
+`sfaeer697/cleardesk-app` repository. Installers are built there by GitHub
+Actions and published to this repository's **Releases**, so buyers can download
+without access to the source.
 
 ```
 cleardesk-site/
 ├─ public/              The website (index.html, styles.css, site.js, thanks.html, img/)
+│  ├─ robots.txt
+│  └─ sitemap.xml
 ├─ api/
 │  ├─ pricing.js        GET  /api/pricing  → live tier ladder (CDN-cached 30 s)
 │  └─ checkout.js       POST /api/checkout → Lemon Squeezy checkout at today's price
@@ -18,9 +25,44 @@ cleardesk-site/
 └─ .env.example         The 5 environment variables
 ```
 
+## Download links
+
+`public/site.js` points to stable asset names in this repository's latest
+release:
+
+```
+https://github.com/sfaeer697/cleardesk-web/releases/latest/download/ClearDesk-Windows-x64-Setup.exe
+https://github.com/sfaeer697/cleardesk-web/releases/latest/download/ClearDesk-Windows-x64.msi
+https://github.com/sfaeer697/cleardesk-web/releases/latest/download/ClearDesk-macOS-universal.dmg
+```
+
+The app's **Release installers** workflow creates the release and uploads those
+names whenever a `v*` tag is pushed to `cleardesk-app`. Because the names never
+change, the website never needs editing for a new version.
+
+To ship the first public build:
+
+1. In `cleardesk-app`, add the `RELEASE_TOKEN`, `PUBLISH_RELEASES=true` and
+   `DOWNLOADS_REPO=sfaeer697/cleardesk-web` repository settings (see the app's
+   `docs/RELEASING.md`).
+2. Push a tag:
+
+   ```powershell
+   git tag v0.1.0
+   git push origin v0.1.0
+   ```
+
+3. Wait for the workflow to finish. The release page should show the `.exe`,
+   `.msi` and `.dmg`.
+4. Reload the site. Both download buttons now work.
+
+The Mac build is unsigned, so the site's FAQ explains the one-time Gatekeeper
+step. Add Apple signing and notarization later to remove it. Windows SmartScreen
+will warn until the installer is code-signed.
+
 ## How the launch pricing works
 
-| Tier | Buyers | Price (edit in `tiers.mjs`) |
+| Tier | Buyers | Price (edit in `lib/tiers.js`) |
 |---|---|---|
 | Founding | first 5 | $9 |
 | Early | next 20 | $14 |
@@ -59,12 +101,12 @@ becomes available again.
 5. In the app, set `STORE_ID` and `PRODUCT_ID` in
    `cleardesk/src-tauri/src/license.rs` so keys from other products are rejected.
 
-## Deploy to Vercel (with your own domain)
+## Deploy to Vercel (with getcleardesk.online)
 
-1. Put `cleardesk-site` on GitHub as its own repository.
-2. Go to https://vercel.com → **Add New → Project** → import the repo.
+1. Push this repository to GitHub (`sfaeer697/cleardesk-web`, `main`).
+2. Go to https://vercel.com → **Add New → Project** → import `cleardesk-web`.
    * Framework preset: **Other**. Leave the build command and install command empty.
-   * Root directory: the repo root (where `vercel.json` is).
+   * Root directory: the repository root (where `vercel.json` is).
 3. Add these under **Settings → Environment Variables** (Production and Preview):
 
 | Variable | Value |
@@ -72,18 +114,19 @@ becomes available again.
 | `LEMONSQUEEZY_API_KEY` | your API key |
 | `LEMONSQUEEZY_STORE_ID` | e.g. `12345` |
 | `LEMONSQUEEZY_VARIANT_ID` | e.g. `67890` |
-| `SITE_URL` | `https://yourdomain.com` |
+| `SITE_URL` | `https://getcleardesk.online` |
 | `LEMONSQUEEZY_TEST_MODE` | `true` while testing, delete for launch |
 
    Then click **Deployments → Redeploy** so the functions pick up the values.
-4. **Custom domain:** Settings → Domains → add `yourdomain.com` and `www.yourdomain.com`.
-   At your registrar, add the DNS records Vercel shows (usually an `A` record
-   `@ → 76.76.21.21` and a `CNAME` record `www → cname.vercel-dns.com`). HTTPS is automatic.
-5. Edit `public/site.js` → `CONFIG.downloads.windows` with the installer URL
-   (GitHub Releases works well) and replace `[SUPPORT EMAIL]` in `index.html` and `site.js`.
-6. In the app, set `BUY_URL` in `cleardesk/src/app/core/models.ts` to `https://yourdomain.com/#pricing`.
+4. **Custom domain:** Settings → Domains → add `getcleardesk.online` and
+   `www.getcleardesk.online`. At your registrar, add the DNS records Vercel
+   shows (usually an `A` record `@ → 76.76.21.21` and a `CNAME` record
+   `www → cname.vercel-dns.com`). HTTPS is automatic.
+5. Set `BUY_URL` in `cleardesk/src/app/core/models.ts` to
+   `https://getcleardesk.online/#pricing` (already set).
 
-Every `git push` to `main` redeploys automatically.
+Every `git push` to `main` redeploys automatically once the Vercel project is
+connected.
 
 ## Test before launch
 
@@ -97,7 +140,7 @@ Every `git push` to `main` redeploys automatically.
 ## Preview locally
 
 ```powershell
-cd D:\cleardesk-v1\cleardesk-site
+cd D:\Indie-Projects\cleardesk-v1\cleardesk-site
 npx serve public          # design only: the pricing ladder uses the default (0 sold)
 # with the real functions:
 npm i -g vercel
@@ -108,8 +151,8 @@ vercel dev                # reads .env.local (copy it from .env.example)
 
 These are placeholders in the copy. Change any of them:
 
-* Prices $9 / $14 / $19 and the 5 / 20 seat counts (`tiers.mjs` + `site.js` fallback)
+* Prices $9 / $14 / $19 and the 5 / 20 seat counts (`lib/tiers.js` + `site.js` fallback)
 * "Use it on 2 computers" (must match the activation limit in Lemon Squeezy)
 * "14-day refund"
 * "Made in Karachi" in the footer
-* Your domain (`SITE_URL` in Vercel, `BUY_URL` in the app)
+* The support email (`support@getcleardesk.online`) if you use a different one

@@ -7,7 +7,12 @@
   <meta name="description" content="ClearDesk is the fastest private workspace for the files you are using right now. Drop files into a workspace, press one shortcut, find and drag them anywhere. Windows and macOS.">
   <meta property="og:title" content="ClearDesk — Keep today’s work one shortcut away">
   <meta property="og:description" content="The fastest private workspace for the files you are using right now.">
-  <meta property="og:image" content="/img/panel-win.webp">
+  <meta property="og:image" content="https://getcleardesk.online/img/panel-win.webp">
+  <meta property="og:url" content="https://getcleardesk.online/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="ClearDesk">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://getcleardesk.online/">
   <meta name="theme-color" content="#0F766E">
   <link rel="icon" type="image/png" href="/favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -48,11 +53,11 @@
           ready to open or drag into any app.
         </p>
         <div class="cta" id="download">
-          <a class="btn lg primary" data-dl="windows" href="#">
+          <a class="btn lg primary" data-dl="windows" href="https://github.com/sfaeer697/cleardesk-web/releases/latest/download/ClearDesk-Windows-x64-Setup.exe">
             <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M3 5.5l7.5-1v7H3zm8.5-1.2L21 3v8.5h-9.5zM3 12.5h7.5v7L3 18.5zm8.5 0H21V21l-9.5-1.3z"/></svg>
             <span>Download for Windows</span>
           </a>
-          <a class="btn lg" data-dl="mac" href="#">
+          <a class="btn lg" data-dl="mac" href="https://github.com/sfaeer697/cleardesk-web/releases/latest/download/ClearDesk-macOS-universal.dmg">
             <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M16.4 12.6c0-2.6 2.1-3.8 2.2-3.9-1.2-1.8-3.1-2-3.7-2-1.6-.2-3.1.9-3.9.9-.8 0-2-.9-3.4-.9-1.7 0-3.3 1-4.2 2.6-1.8 3.1-.5 7.7 1.3 10.2.9 1.2 1.9 2.6 3.2 2.6 1.3-.1 1.8-.8 3.3-.8 1.6 0 2 .8 3.4.8 1.4 0 2.3-1.3 3.1-2.5 1-1.4 1.4-2.8 1.4-2.9 0 0-2.7-1-2.7-4.1zM13.9 5c.7-.9 1.2-2.1 1.1-3.3-1 0-2.3.7-3 1.6-.7.8-1.3 2-1.1 3.2 1.1.1 2.3-.6 3-1.5z"/></svg>
             <span data-mac-label>Download for macOS</span>
           </a>
@@ -282,6 +287,7 @@
         <details><summary>Is it a subscription?</summary><p>No. Pay once and keep it. Every 1.x update is free.</p></details>
         <details><summary>Can I get a refund?</summary><p>Yes, within 14 days, for any reason. Reply to your receipt email.</p></details>
         <details><summary>Which systems does it run on?</summary><p>Windows 10 and 11 (Mica effects on 11), and macOS 11 Big Sur or newer on Apple silicon and Intel.</p></details>
+        <details><summary>The Mac app says it is from an unidentified developer</summary><p>The build is not notarized yet. Right-click (or Control-click) ClearDesk in Applications, choose <strong>Open</strong>, then <strong>Open</strong> again. You can also run <code>xattr -dr com.apple.quarantine /Applications/ClearDesk.app</code> in Terminal once. Windows may show a similar SmartScreen prompt until the installer is code-signed.</p></details>
       </div>
     </section>
 
@@ -306,7 +312,7 @@
       <nav aria-label="Footer">
         <a href="#privacy">Privacy</a>
         <a href="#faq">FAQ</a>
-        <a href="mailto:[SUPPORT EMAIL]">Support</a>
+        <a href="mailto:support@getcleardesk.online">Support</a>
       </nav>
     </div>
   </footer>

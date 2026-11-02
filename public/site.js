@@ -4,12 +4,12 @@
 /* ---- Edit these before launch ---------------------------------------- */
 const CONFIG = {
   downloads: {
-    // e.g. 'https://github.com/<you>/cleardesk/releases/latest/download/ClearDesk_x64-setup.exe'
-    windows: '[WINDOWS INSTALLER URL]',
-    // null until the Mac build ships → the button offers to email you instead.
-    mac: null,
+    // Stable links to the latest release in the public downloads repository.
+    // The app's release workflow uploads these exact asset names.
+    windows: 'https://github.com/sfaeer697/cleardesk-web/releases/latest/download/ClearDesk-Windows-x64-Setup.exe',
+    mac: 'https://github.com/sfaeer697/cleardesk-web/releases/latest/download/ClearDesk-macOS-universal.dmg',
   },
-  macWaitlist: 'mailto:[SUPPORT EMAIL]?subject=Tell%20me%20when%20ClearDesk%20for%20Mac%20ships',
+  macWaitlist: 'mailto:support@getcleardesk.online?subject=Tell%20me%20when%20ClearDesk%20for%20Mac%20ships',
   // Shown if /api/pricing can't be reached (e.g. opening the file locally).
   // Keep in sync with lib/tiers.js.
   fallbackTiers: [
