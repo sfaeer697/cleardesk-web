@@ -1,0 +1,10 @@
+{
+  "name": "cleardesk-site",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "dev": "vercel dev",
+    "preview": "npx serve public"
+  }
+}

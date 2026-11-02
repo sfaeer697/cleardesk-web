@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ClearDesk — Keep today’s work one shortcut away</title>
+  <meta name="description" content="ClearDesk is the fastest private workspace for the files you are using right now. Drop files into a workspace, press one shortcut, find and drag them anywhere. Windows and macOS.">
+  <meta property="og:title" content="ClearDesk — Keep today’s work one shortcut away">
+  <meta property="og:description" content="The fastest private workspace for the files you are using right now.">
+  <meta property="og:image" content="/img/panel-win.webp">
+  <meta name="theme-color" content="#0F766E">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+  <script src="https://app.lemonsqueezy.com/js/lemon.js" defer></script>
+  <script src="/site.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="nav" id="top">
+    <div class="wrap nav-in">
+      <a class="brand" href="#top"><img src="/app-icon.png" alt="" width="28" height="28">ClearDesk</a>
+      <nav aria-label="Main">
+        <a href="#features">Features</a>
+        <a href="#how">How it works</a>
+        <a href="#privacy">Privacy</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+      <a class="btn sm primary" href="#pricing" data-price-label>Get ClearDesk</a>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- ============ HERO ============ -->
+    <section class="hero">
+      <div class="wrap hero-in">
+        <p class="launch" data-launch-pill hidden>
+          <span class="dot"></span><span data-launch-text>Founding price for the first 5 buyers</span>
+        </p>
+        <h1>Keep today’s work<br><span class="grad">one shortcut away.</span></h1>
+        <p class="lead">
+          ClearDesk is a private workspace for the files you’re using right now.
+          Drop them in, press <kbd data-key-combo>Ctrl</kbd>, type two letters and they’re back,
+          ready to open or drag into any app.
+        </p>
+        <div class="cta" id="download">
+          <a class="btn lg primary" data-dl="windows" href="#">
+            <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M3 5.5l7.5-1v7H3zm8.5-1.2L21 3v8.5h-9.5zM3 12.5h7.5v7L3 18.5zm8.5 0H21V21l-9.5-1.3z"/></svg>
+            <span>Download for Windows</span>
+          </a>
+          <a class="btn lg" data-dl="mac" href="#">
+            <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M16.4 12.6c0-2.6 2.1-3.8 2.2-3.9-1.2-1.8-3.1-2-3.7-2-1.6-.2-3.1.9-3.9.9-.8 0-2-.9-3.4-.9-1.7 0-3.3 1-4.2 2.6-1.8 3.1-.5 7.7 1.3 10.2.9 1.2 1.9 2.6 3.2 2.6 1.3-.1 1.8-.8 3.3-.8 1.6 0 2 .8 3.4.8 1.4 0 2.3-1.3 3.1-2.5 1-1.4 1.4-2.8 1.4-2.9 0 0-2.7-1-2.7-4.1zM13.9 5c.7-.9 1.2-2.1 1.1-3.3-1 0-2.3.7-3 1.6-.7.8-1.3 2-1.1 3.2 1.1.1 2.3-.6 3-1.5z"/></svg>
+            <span data-mac-label>Download for macOS</span>
+          </a>
+        </div>
+        <p class="fine">Free to try · Pay once for unlimited · No account · Windows 10/11 · macOS 11+</p>
+
+        <div class="showcase">
+          <div class="os-toggle" role="tablist" aria-label="Show screenshots for">
+            <button role="tab" aria-selected="true" data-os="win">Windows</button>
+            <button role="tab" aria-selected="false" data-os="mac">macOS</button>
+          </div>
+          <div class="shot-stack">
+            <img class="shot-back" data-shot="workspace" src="/img/workspace-win.webp" width="1280" height="800" alt="The ClearDesk workspace window showing files, links and notes for a client project, with a Resume work button.">
+            <img class="shot-front" data-shot="panel" src="/img/panel-win.webp" width="800" height="561" alt="The ClearDesk quick panel: a search box, pinned and recent files, and a preview of the selected file.">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ PROBLEM ============ -->
+    <section class="problem">
+      <div class="wrap problem-in">
+        <p class="eyebrow">The problem isn’t finding files</p>
+        <h2>It’s getting the right ten back, ten minutes later.</h2>
+        <div class="pains">
+          <div><strong>Five jobs at once</strong><span>A client site, a bug, an invoice and a deadline, all fighting over one Desktop.</span></div>
+          <div><strong>Desktop as a junk drawer</strong><span>Screenshots, downloads and “final-v3” pile up until nothing is findable.</span></div>
+          <div><strong>Search finds everything</strong><span>Spotlight and Start search the whole computer. You only want what you were using.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ FEATURES ============ -->
+    <section class="features" id="features">
+      <div class="wrap">
+        <p class="eyebrow">What you get</p>
+        <h2>A shelf for the work in front of you.</h2>
+
+        <div class="feature-hero">
+          <div class="fh-text">
+            <span class="tag">The quick panel</span>
+            <h3>One shortcut. Type. Enter.</h3>
+            <p>Press <kbd data-key-combo>Ctrl</kbd> in any app. Search is already focused, with your pinned, recent and newest files underneath. Nothing to pick first.</p>
+            <ul class="ticks">
+              <li>Results rank your current workspace first</li>
+              <li><kbd>Space</kbd> to preview, <kbd data-mod>Ctrl</kbd><kbd>K</kbd> for every action</li>
+              <li>Drag any result straight into mail, chat or a folder</li>
+            </ul>
+          </div>
+          <img class="fh-img" data-shot="panel-search" src="/img/panel-search-win.webp" width="800" height="561" alt="The quick panel searching for “brief” and showing one matching PDF with its preview." loading="lazy">
+        </div>
+
+        <div class="grid">
+          <article class="card">
+            <span class="ic"><svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5"/></svg></span>
+            <h3>Resume work</h3>
+            <p>One button reopens the files and links you had open last time, with your last search and latest note.</p>
+          </article>
+          <article class="card">
+            <span class="ic"><svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></span>
+            <h3>Workspaces, not folders</h3>
+            <p>“Client Chris”, “Bug #482”, “October invoices”. Files, folders, links, screenshots and notes for one job, in one place.</p>
+          </article>
+          <article class="card">
+            <span class="ic"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M4 19h16"/></svg></span>
+            <h3>Drag in, drag out</h3>
+            <p>Drop anything onto ClearDesk. Drag it back out into any app. It’s the real file, not a copy.</p>
+          </article>
+          <article class="card">
+            <span class="ic"><svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18a9 9 0 1 0 0-18zM12 7v5l3 2"/></svg></span>
+            <h3>Cleans up after itself</h3>
+            <p>Set a workspace to archive after 1, 7 or 30 days. Finished work leaves your way and nothing is deleted.</p>
+          </article>
+          <article class="card">
+            <span class="ic"><svg viewBox="0 0 24 24"><path d="M4 7h11M4 7l3-3M4 7l3 3M20 17H9M20 17l-3-3M20 17l-3 3"/></svg></span>
+            <h3>Knows when files move</h3>
+            <p>Moved, missing or on a drive that isn’t plugged in. ClearDesk tells you, often finds the new spot, and relinks in one click.</p>
+          </article>
+          <article class="card">
+            <span class="ic"><svg viewBox="0 0 24 24"><path d="M4 4h6.5v6.5H4zM13.5 4H20v6.5h-6.5zM4 13.5h6.5V20H4zM13.5 13.5H20V20h-6.5z"/></svg></span>
+            <h3>Native on both systems</h3>
+            <p>Mica and File Explorer wording on Windows. Vibrancy, Quick Look and Finder wording on Mac. Never a port.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ HOW ============ -->
+    <section class="how" id="how">
+      <div class="wrap">
+        <p class="eyebrow">How it works</p>
+        <h2>Three steps. Then it’s a habit.</h2>
+        <ol class="steps">
+          <li><span class="n">1</span><h3>Make a workspace</h3><p>One per client, bug, assignment or invoice run. Pick a colour and when it should archive.</p></li>
+          <li><span class="n">2</span><h3>Drop your files in</h3><p>ClearDesk keeps a link to each one. Originals stay exactly where they are.</p></li>
+          <li><span class="n">3</span><h3>Press the shortcut</h3><p>From any app: type, Enter, done. Or drag the file out to wherever it’s going.</p></li>
+        </ol>
+
+        <div class="keys">
+          <h3>Fast with a keyboard, fine with a mouse</h3>
+          <table>
+            <thead><tr><th scope="col">Action</th><th scope="col">Windows</th><th scope="col">macOS</th></tr></thead>
+            <tbody>
+              <tr><td>Open the quick panel</td><td><kbd>Ctrl</kbd><kbd>Shift</kbd><kbd>Space</kbd></td><td><kbd>⌘</kbd><kbd>⇧</kbd><kbd>Space</kbd></td></tr>
+              <tr><td>Open</td><td><kbd>Enter</kbd></td><td><kbd>↩</kbd></td></tr>
+              <tr><td>Preview</td><td><kbd>Space</kbd></td><td><kbd>Space</kbd></td></tr>
+              <tr><td>Show in folder</td><td><kbd>Ctrl</kbd><kbd>Enter</kbd></td><td><kbd>⌘</kbd><kbd>↩</kbd></td></tr>
+              <tr><td>Copy path</td><td><kbd>Ctrl</kbd><kbd>Shift</kbd><kbd>C</kbd></td><td><kbd>⌥</kbd><kbd>⌘</kbd><kbd>C</kbd></td></tr>
+              <tr><td>Copy the file</td><td><kbd>Ctrl</kbd><kbd>C</kbd></td><td><kbd>⌘</kbd><kbd>C</kbd></td></tr>
+              <tr><td>Pin</td><td><kbd>P</kbd></td><td><kbd>P</kbd></td></tr>
+              <tr><td>Remove from ClearDesk</td><td><kbd>Del</kbd></td><td><kbd>⌘</kbd><kbd>⌫</kbd></td></tr>
+            </tbody>
+          </table>
+          <p class="fine">The shortcut is yours to change. It never takes Ctrl+Space or ⌘Space.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ COMPARE ============ -->
+    <section class="compare">
+      <div class="wrap">
+        <p class="eyebrow">Why not just…</p>
+        <h2>Built for the files you’re using, not every file you own.</h2>
+        <div class="table-scroll">
+          <table class="cmp">
+            <thead>
+              <tr><th scope="col"></th><th scope="col" class="us">ClearDesk</th><th scope="col">The Desktop</th><th scope="col">System search</th><th scope="col">Drag shelves</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Groups files by job</th><td class="us yes">Yes</td><td>Folders, by hand</td><td>No</td><td>No</td></tr>
+              <tr><th scope="row">Brings back last session</th><td class="us yes">Resume work</td><td>No</td><td>No</td><td>No</td></tr>
+              <tr><th scope="row">Searches only current work</th><td class="us yes">Yes</td><td>—</td><td>Whole computer</td><td>Shelf only</td></tr>
+              <tr><th scope="row">Survives restarts and days</th><td class="us yes">Yes</td><td>Yes</td><td>—</td><td>Often cleared</td></tr>
+              <tr><th scope="row">Tidies itself</th><td class="us yes">Expiry → Archive</td><td>No</td><td>—</td><td>Sometimes</td></tr>
+              <tr><th scope="row">Tells you when a file moved</th><td class="us yes">Finds &amp; relinks</td><td>No</td><td>No</td><td>No</td></tr>
+              <tr><th scope="row">Windows and Mac</th><td class="us yes">Both</td><td>Both</td><td>Both</td><td>Mostly Mac</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ PRIVACY ============ -->
+    <section class="privacy" id="privacy">
+      <div class="wrap privacy-in">
+        <div>
+          <p class="eyebrow light">Privacy</p>
+          <h2>Your files never leave your computer.</h2>
+          <p class="lead">ClearDesk remembers where your files are. That’s all. It doesn’t upload, scan or copy anything.</p>
+        </div>
+        <ul class="pgrid">
+          <li><strong>No account</strong><span>Buy, enter your licence, done.</span></li>
+          <li><strong>No analytics</strong><span>No tracking, no telemetry. It only goes online to check your licence key.</span></li>
+          <li><strong>No disk scanning</strong><span>It only looks at files you add.</span></li>
+          <li><strong>Never deletes</strong><span>“Remove” takes it off ClearDesk only.</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============ PRICING ============ -->
+    <section class="pricing" id="pricing">
+      <div class="wrap">
+        <p class="eyebrow">Launch pricing</p>
+        <h2>Pay once. The earlier you buy, the less you pay.</h2>
+        <p class="lead center">The price rises as each launch tier sells out. Everyone gets the same app and the same updates.</p>
+
+        <ol class="ladder" data-ladder aria-label="Launch price tiers">
+          <li class="tier current" data-tier="founding">
+            <div class="t-head"><span class="t-name">Founding</span><span class="t-state">Now</span></div>
+            <div class="t-price"><span class="cur">$</span><span data-price>9</span></div>
+            <p class="t-sub">First <span data-seats>5</span> buyers</p>
+            <div class="bar" aria-hidden="true"><i data-bar style="width:0%"></i></div>
+            <p class="t-left" data-left>5 of 5 left</p>
+          </li>
+          <li class="tier upcoming" data-tier="early">
+            <div class="t-head"><span class="t-name">Early</span><span class="t-state">Next</span></div>
+            <div class="t-price"><span class="cur">$</span><span data-price>14</span></div>
+            <p class="t-sub">Next <span data-seats>20</span> buyers</p>
+            <div class="bar" aria-hidden="true"><i data-bar style="width:0%"></i></div>
+            <p class="t-left" data-left>20 of 20 left</p>
+          </li>
+          <li class="tier upcoming" data-tier="standard">
+            <div class="t-head"><span class="t-name">Standard</span><span class="t-state">After launch</span></div>
+            <div class="t-price"><span class="cur">$</span><span data-price>19</span></div>
+            <p class="t-sub">Regular price</p>
+            <div class="bar" aria-hidden="true"><i style="width:0%"></i></div>
+            <p class="t-left">&nbsp;</p>
+          </li>
+        </ol>
+
+        <div class="buy-card">
+          <div class="bc-left">
+            <img src="/app-icon.png" alt="" width="56" height="56">
+            <div>
+              <h3>ClearDesk for Windows &amp; macOS</h3>
+              <p>One-time purchase · Personal licence · Use it on 2 computers</p>
+            </div>
+          </div>
+          <ul class="bc-list">
+            <li>Unlimited workspaces and items</li>
+            <li>Quick panel, Resume work, drag in &amp; out</li>
+            <li>Expiry, archive and moved-file finder</li>
+            <li>Free updates for every 1.x version</li>
+            <li>14-day refund, no questions</li>
+          </ul>
+          <div class="bc-buy">
+            <div class="bc-price"><span class="now">$<span data-current-price>9</span></span><span class="was" data-was>$19</span></div>
+            <button class="btn lg primary" type="button" data-buy>Buy ClearDesk</button>
+            <p class="fine" data-buy-note>Secure checkout by Lemon Squeezy. Taxes handled for you. Try the free version first: 1 workspace, 50 items.</p>
+            <p class="err" data-buy-error role="alert" hidden></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ FAQ ============ -->
+    <section class="faq" id="faq">
+      <div class="wrap narrow">
+        <p class="eyebrow">Questions</p>
+        <h2>Good to know</h2>
+        <details><summary>Does ClearDesk move or copy my files?</summary><p>Neither. It stores a link to where each file already lives. Removing an item only takes it off ClearDesk. The file stays in its folder.</p></details>
+        <details><summary>What happens if I rename or move a file?</summary><p>ClearDesk notices the next time you open the panel. If it can find the file nearby, it shows “Moved” and relinks with one click. If not, it says “Missing” and lets you find it again or remove it.</p></details>
+        <details><summary>Does it search my whole computer?</summary><p>No, on purpose. It searches only what you added to workspaces, which is why it’s instant and private. For everything else, your system search is great.</p></details>
+        <details><summary>Will the shortcut clash with Spotlight or my keyboard language?</summary><p>No. The default is Ctrl+Shift+Space (⌘⇧Space on Mac). ClearDesk refuses Ctrl+Space and ⌘Space, and you can pick any shortcut you like.</p></details>
+        <details><summary>How does launch pricing work?</summary><p>The first 5 licences sell at the Founding price and the next 20 at the Early price. After that it’s the regular price. The price at checkout is always the tier that’s live at that moment.</p></details>
+        <details><summary>Is there a free version?</summary><p>Yes. Download it and use one workspace with up to 50 items, free forever. A licence unlocks unlimited workspaces and items. Paste the key in Settings and you’re done.</p></details>
+        <details><summary>Is it a subscription?</summary><p>No. Pay once and keep it. Every 1.x update is free.</p></details>
+        <details><summary>Can I get a refund?</summary><p>Yes, within 14 days, for any reason. Reply to your receipt email.</p></details>
+        <details><summary>Which systems does it run on?</summary><p>Windows 10 and 11 (Mica effects on 11), and macOS 11 Big Sur or newer on Apple silicon and Intel.</p></details>
+      </div>
+    </section>
+
+    <!-- ============ FINAL CTA ============ -->
+    <section class="final">
+      <div class="wrap final-in">
+        <img src="/app-icon.png" alt="" width="72" height="72">
+        <h2>Clear the desk. Keep the work.</h2>
+        <p data-final-note>Founding price for the first 5 buyers.</p>
+        <div class="cta">
+          <a class="btn lg primary" href="#pricing"><span>Get ClearDesk for $<span data-current-price>9</span></span></a>
+          <a class="btn lg ghost" href="#download">Download</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <div class="wrap foot-in">
+      <span class="brand small"><img src="/app-icon.png" alt="" width="20" height="20">ClearDesk</span>
+      <span>Made by Safeer Malik</span>
+      <nav aria-label="Footer">
+        <a href="#privacy">Privacy</a>
+        <a href="#faq">FAQ</a>
+        <a href="mailto:[SUPPORT EMAIL]">Support</a>
+      </nav>
+    </div>
+  </footer>
+</body>
+</html>
