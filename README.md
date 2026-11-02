@@ -48,13 +48,16 @@ To ship the first public build:
 2. Push a tag:
 
    ```powershell
-   git tag v0.1.0
-   git push origin v0.1.0
+   git tag v0.1.1
+   git push origin v0.1.1
    ```
 
 3. Wait for the workflow to finish. The release page should show the `.exe`,
    `.msi` and `.dmg`.
 4. Reload the site. Both download buttons now work.
+
+The current public release is **v0.1.1**, so all three stable links above are
+live even while the marketing site is still being deployed.
 
 The Mac build is unsigned, so the site's FAQ explains the one-time Gatekeeper
 step. Add Apple signing and notarization later to remove it. Windows SmartScreen
@@ -127,6 +130,24 @@ becomes available again.
 
 Every `git push` to `main` redeploys automatically once the Vercel project is
 connected.
+
+### If the deployment returns 500 on every page
+
+`X-Vercel-Error: FUNCTION_INVOCATION_FAILED` on `/` means Vercel is sending the
+request to a serverless function that is failing at startup, not serving
+`public/index.html`. Usually the project is stale or connected to the wrong
+repository. Check, in order:
+
+1. **Settings → General → Root Directory** is empty (repo root, where
+   `vercel.json` is), and **Framework Preset** is **Other**.
+2. **Build & Development Settings** has no build command and no install
+   command. `vercel.json` already sets `outputDirectory` to `public`.
+3. The project is connected to `sfaeer697/cleardesk-web` and the production
+   deployment's commit is the latest `main`.
+4. Add the environment variables, then **Deployments → Redeploy** (functions do
+   not pick up new variables without a redeploy).
+5. If the project has old rewrites or a stale build, create a fresh project from
+   the same repository and move the domain to it.
 
 ## Test before launch
 
