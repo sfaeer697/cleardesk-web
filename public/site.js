@@ -1,5 +1,5 @@
 // ClearDesk site behaviour: OS-aware downloads & keys, live launch pricing,
-// Lemon Squeezy checkout. No trackers.
+// Polar checkout. No trackers.
 
 /* ---- Edit these before launch ---------------------------------------- */
 const CONFIG = {
@@ -193,8 +193,7 @@ async function buy(btn) {
       // visitor sees the price they're about to pay.
       void loadPricing();
     }
-    if (window.LemonSqueezy?.Url?.Open) window.LemonSqueezy.Url.Open(data.url);
-    else window.location.href = data.url;
+    window.location.assign(data.url);
   } catch (e) {
     err.textContent = e.message;
     err.hidden = false;
@@ -214,12 +213,15 @@ document.addEventListener('DOMContentLoaded', () => {
   setupMotion();
   $$('[data-buy]').forEach((b) => b.addEventListener('click', () => buy(b)));
   void loadPricing();
+});
 
-  // Lemon.js overlay: refresh tiers after a successful purchase.
-  window.createLemonSqueezy?.();
-  window.LemonSqueezy?.Setup?.({
-    eventHandler: (e) => {
-      if (e?.event === 'Checkout.Success') void loadPricing();
-    },
-  });
+// Hero demo loop: respect reduced motion (show controls instead of autoplay).
+document.addEventListener('DOMContentLoaded', () => {
+  const v = document.querySelector('.demo-video');
+  if (!v) return;
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    v.removeAttribute('autoplay');
+    v.pause();
+    v.controls = true;
+  }
 });

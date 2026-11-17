@@ -1,8 +1,8 @@
 # ClearDesk website
 
-One-page landing site with live launch pricing, Lemon Squeezy checkout and
-public installer downloads. Plain HTML/CSS/JS plus two Vercel Functions. No
-build step and no dependencies.
+One-page landing site with live launch pricing, Polar checkout and public
+installer downloads. Plain HTML/CSS/JS plus two Vercel Functions. No build step
+and no dependencies.
 
 This repository is **public**. The desktop app source lives in the private
 `sfaeer697/cleardesk-app` repository. Installers are built there by GitHub
@@ -18,13 +18,13 @@ cleardesk-site/
 │  └─ sitemap.xml
 ├─ api/
 │  ├─ pricing.js        GET  /api/pricing  → live tier ladder (CDN-cached 30 s)
-│  └─ checkout.js       POST /api/checkout → Lemon Squeezy checkout at today's price
+│  └─ checkout.js       POST /api/checkout → Polar checkout at today's price
 ├─ lib/
 │  ├─ tiers.js          ← EDIT PRICES HERE (5 founding → 20 early → standard)
-│  └─ lemon.js          Lemon Squeezy API client (server-side only)
+│  └─ polar.js          Polar API client (server-side only)
 ├─ vercel.json          Static output = public/, security headers
 ├─ package.json         No dependencies — nothing to npm install for the site
-└─ .env.example         The 5 environment variables
+└─ .env.example         The environment variables
 ```
 
 ## Download links
@@ -42,25 +42,6 @@ The app's **Release installers** workflow creates the release and uploads those
 names whenever a `v*` tag is pushed to `cleardesk-app`. Because the names never
 change, the website never needs editing for a new version.
 
-To ship the first public build:
-
-1. In `cleardesk-app`, add the `RELEASE_TOKEN`, `PUBLISH_RELEASES=true` and
-   `DOWNLOADS_REPO=sfaeer697/cleardesk-web` repository settings (see the app's
-   `docs/RELEASING.md`).
-2. Push a tag:
-
-   ```powershell
-   git tag v0.1.1
-   git push origin v0.1.1
-   ```
-
-3. Wait for the workflow to finish. The release page should show the `.exe`,
-   `.msi` and `.dmg`.
-4. Reload the site. Both download buttons now work.
-
-The current public release is **v0.1.1**, so all three stable links above are
-live even while the marketing site is still being deployed.
-
 The Mac build is unsigned, so the site's FAQ explains the one-time Gatekeeper
 step. Add Apple signing and notarization later to remove it. Windows SmartScreen
 will warn until the installer is code-signed.
@@ -74,37 +55,48 @@ will warn until the installer is code-signed.
 | Standard | everyone after | $19 |
 
 1. The page calls `/api/pricing`. The function counts **paid, non-refunded**
-   orders for your product in Lemon Squeezy and returns which tier is live and
-   how many seats are left. The page fills in the ladder, the progress bars and
-   every price on the page.
+   orders for your product in Polar and returns which tier is live and how many
+   seats are left. The page fills in the ladder, the progress bars and every
+   price on the page.
 2. **Buy** calls `/api/checkout`. The function counts again (fresh, not cached),
-   then creates a one-hour Lemon Squeezy checkout with `custom_price` set to the
-   live tier. The price is decided on the server, so nobody can reuse an old
-   cheap link after a tier sells out.
-3. The checkout opens as a Lemon Squeezy overlay. After payment, Lemon Squeezy
-   emails a **licence key** and redirects to `thanks.html`.
+   then creates a Polar checkout with an ad-hoc fixed price equal to the live
+   tier. The price is decided on the server, so nobody can reuse an old cheap
+   link after a tier sells out.
+3. After payment, Polar emails a **licence key** and redirects to `thanks.html`.
 4. The buyer pastes the key into **ClearDesk → Settings → ClearDesk Pro**. The
-   app activates it against the Lemon Squeezy License API (2 computers per key).
+   app activates it against Polar's public customer-portal licence API
+   (activation limit 2).
 
-Refunds automatically drop out of the count, so a refunded Founding seat
-becomes available again.
+Refunds automatically drop out of the count (`status=paid` excludes refunded and
+partially refunded orders), so a refunded Founding seat becomes available again.
 
-## Set up Lemon Squeezy (about 15 minutes)
+## Set up Polar
 
-1. **Create a store** at https://app.lemonsqueezy.com. Pakistan isn't on the
-   payout list for every method, so check **Settings → Payouts** early. Wise or
-   Payoneer usually work.
+1. **Create an organization** at https://polar.sh. Polar is the merchant of
+   record, so it handles sales tax and payouts. Check **Settings → Payouts**
+   before going live.
 2. **Create the product** "ClearDesk Pro":
-   * Pricing: single payment, **$19** (the standard price; checkouts override it per tier).
-   * **Generate licence keys: on.** Activation limit **2**, never expires.
-   * Optional: attach the installer as a downloadable file.
-3. Note the IDs:
-   * **Store ID**: Settings → Stores.
-   * **Variant ID**: open the product → the variant's ⋯ menu → Copy ID.
-   * **Product ID**: in the product URL. You need it for the app.
-4. **API key**: Settings → API → create a key. Use a test-mode key while testing.
-5. In the app, set `STORE_ID` and `PRODUCT_ID` in
-   `cleardesk/src-tauri/src/license.rs` so keys from other products are rejected.
+   * One-time purchase, base price **$19** (checkouts override it per tier).
+   * **Benefits → New Benefit → License Keys**: prefix `CLEARDESK`, activation
+     limit **2**, no expiration.
+3. Note the IDs from the dashboard or the API:
+   * **Organization ID** — Settings → Organization. You need it for the app.
+   * **Product ID** — in the product URL. The site and the app both use it.
+   * **Benefit ID** — in the benefit URL. Optional but recommended for the app.
+4. **Create an Organization Access Token** (OAT): Settings → Organization →
+   Access Tokens. This is a secret; it goes only into Vercel.
+5. While testing, either use the **sandbox** environment
+   (https://sandbox.polar.sh, API `https://sandbox-api.polar.sh/v1`) or make a
+   discounted test product in production.
+
+Polar's licence endpoints used by the desktop app need **no token at all**, which
+is why nothing secret ships inside ClearDesk:
+
+```
+POST https://api.polar.sh/v1/customer-portal/license-keys/activate
+POST https://api.polar.sh/v1/customer-portal/license-keys/validate
+POST https://api.polar.sh/v1/customer-portal/license-keys/deactivate
+```
 
 ## Deploy to Vercel (with getcleardesk.online)
 
@@ -116,11 +108,11 @@ becomes available again.
 
 | Variable | Value |
 |---|---|
-| `LEMONSQUEEZY_API_KEY` | your API key |
-| `LEMONSQUEEZY_STORE_ID` | e.g. `12345` |
-| `LEMONSQUEEZY_VARIANT_ID` | e.g. `67890` |
-| `SITE_URL` | `https://getcleardesk.online` |
-| `LEMONSQUEEZY_TEST_MODE` | `true` while testing, delete for launch |
+| `POLAR_ACCESS_TOKEN` | your Organization Access Token (secret) |
+| `POLAR_ORGANIZATION_ID` | organization UUID |
+| `POLAR_PRODUCT_ID` | product UUID |
+| `SITE_URL` | `https://getcleardesk.online` (or the Vercel URL first) |
+| `POLAR_ENVIRONMENT` | `sandbox` while testing, `production` for launch |
 
    Then click **Deployments → Redeploy** so the functions pick up the values.
 4. **Custom domain:** Settings → Domains → add `getcleardesk.online` and
@@ -153,12 +145,13 @@ repository. Check, in order:
 
 ## Test before launch
 
-1. With test mode on, open the site, check the ladder shows "5 of 5 left", and
-   buy with card `4242 4242 4242 4242`.
+1. Open the site, check the ladder shows "5 of 5 left", and buy with Polar's
+   test card `4242 4242 4242 4242` in sandbox mode.
 2. Reload and check it shows "4 of 5 left". Paste the emailed key into the app
    and check it says Pro.
-3. Refund the test order in Lemon Squeezy and check the seat comes back.
-4. Turn test mode off and launch.
+3. Refund the test order in Polar and check the seat comes back.
+4. Switch `POLAR_ENVIRONMENT` to `production`, use production IDs and a
+   production OAT, redeploy, then launch.
 
 ## Preview locally
 
@@ -175,7 +168,7 @@ vercel dev                # reads .env.local (copy it from .env.example)
 These are placeholders in the copy. Change any of them:
 
 * Prices $9 / $14 / $19 and the 5 / 20 seat counts (`lib/tiers.js` + `site.js` fallback)
-* "Use it on 2 computers" (must match the activation limit in Lemon Squeezy)
+* "Use it on 2 computers" (must match the activation limit on the Polar licence-key benefit)
 * "14-day refund"
 * "Made in Karachi" in the footer
 * The support email (`support@getcleardesk.online`) if you use a different one

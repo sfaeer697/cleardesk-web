@@ -1,8 +1,8 @@
 // GET /api/pricing → the live launch ladder: which tier is on, seats left.
 import { CURRENCY, ladder, tierFor } from '../lib/tiers.js';
-import { countSold, env } from '../lib/lemon.js';
+import { countSold, env } from '../lib/polar.js';
 
-// Warm function instances reuse this, so we hit Lemon Squeezy at most once a minute.
+// Warm function instances reuse this, so we hit Polar at most once a minute.
 let cache = { at: 0, sold: null };
 const TTL = 60_000;
 

@@ -1,7 +1,7 @@
-// POST /api/checkout → { url } for a Lemon Squeezy checkout at the price of
-// the tier that is live right now.
+// POST /api/checkout → { url } for a Polar checkout at the price of the tier
+// that is live right now.
 import { tierFor } from '../lib/tiers.js';
-import { countSold, createCheckout, env } from '../lib/lemon.js';
+import { countSold, createCheckout, env } from '../lib/polar.js';
 
 export async function POST() {
   const e = env();

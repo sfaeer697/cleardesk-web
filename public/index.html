@@ -19,7 +19,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/styles.css">
-  <script src="https://app.lemonsqueezy.com/js/lemon.js" defer></script>
   <script src="/site.js" defer></script>
 </head>
 <body>
@@ -64,6 +63,21 @@
         </div>
         <p class="fine">Free to try · Pay once for unlimited · No account · Windows 10/11 · macOS 11+</p>
 
+        <div class="showcase demo">
+          <video class="demo-video" autoplay loop muted playsinline preload="metadata" poster="/img/hero-demo-poster.jpg" width="1280" height="720"
+            aria-label="ClearDesk demo: a shortcut opens the quick panel, typing finds a file, Space previews it, and one keystroke lists every action.">
+            <source src="/img/hero-demo.webm" type="video/webm">
+            <source src="/img/hero-demo.mp4" type="video/mp4">
+          </video>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ NATIVE ON BOTH ============ -->
+    <section class="native">
+      <div class="wrap native-in">
+        <p class="eyebrow">Windows and macOS</p>
+        <h2>At home on both.</h2>
         <div class="showcase">
           <div class="os-toggle" role="tablist" aria-label="Show screenshots for">
             <button role="tab" aria-selected="true" data-os="win">Windows</button>
@@ -266,7 +280,7 @@
           <div class="bc-buy">
             <div class="bc-price"><span class="now">$<span data-current-price>9</span></span><span class="was" data-was>$19</span></div>
             <button class="btn lg primary" type="button" data-buy>Buy ClearDesk</button>
-            <p class="fine" data-buy-note>Secure checkout by Lemon Squeezy. Taxes handled for you. Try the free version first: 1 workspace, 50 items.</p>
+            <p class="fine" data-buy-note>Secure checkout by Polar. Taxes handled for you. Try the free version first: 1 workspace, 50 items.</p>
             <p class="err" data-buy-error role="alert" hidden></p>
           </div>
         </div>
