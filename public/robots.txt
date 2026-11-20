@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://getcleardesk.online/sitemap.xml
+Sitemap: https://getcleardesk.site/sitemap.xml

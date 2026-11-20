@@ -1,0 +1,9 @@
+# Copy to .dev.vars for `npm run dev` (wrangler pages dev), and add the same
+# values in Cloudflare → Workers & Pages → cleardesk → Settings → Variables and
+# Secrets (Production and Preview).
+POLAR_ACCESS_TOKEN=
+POLAR_ORGANIZATION_ID=295bfb69-68e5-4704-9842-9df2fe9cd087
+POLAR_PRODUCT_ID=73325a41-7ab0-4cdc-a9e9-9783f23cab88
+SITE_URL=https://getcleardesk.site
+# sandbox while testing, production (or unset) for launch
+POLAR_ENVIRONMENT=production

@@ -1,8 +1,8 @@
 # ClearDesk website
 
 One-page landing site with live launch pricing, Polar checkout and public
-installer downloads. Plain HTML/CSS/JS plus two Vercel Functions. No build step
-and no dependencies.
+installer downloads. Plain HTML/CSS/JS plus two Cloudflare Pages Functions. No
+build step and no runtime dependencies.
 
 This repository is **public**. The desktop app source lives in the private
 `sfaeer697/cleardesk-app` repository. Installers are built there by GitHub
@@ -14,17 +14,20 @@ Working through the launch? Follow [`LAUNCH.md`](LAUNCH.md).
 ```
 cleardesk-site/
 ├─ public/              The website (index.html, styles.css, site.js, thanks.html, img/)
+│  ├─ _headers          Security and cache headers (Cloudflare Pages)
 │  ├─ robots.txt
 │  └─ sitemap.xml
-├─ api/
-│  ├─ pricing.js        GET  /api/pricing  → live tier ladder (CDN-cached 30 s)
-│  └─ checkout.js       POST /api/checkout → Polar checkout at today's price
+├─ functions/
+│  └─ api/
+│     ├─ pricing.js     GET  /api/pricing  → live tier ladder
+│     └─ checkout.js    POST /api/checkout → Polar checkout at today's price
+├─ api/                 Legacy Vercel shims — delete after the Cloudflare cutover
 ├─ lib/
 │  ├─ tiers.js          ← EDIT PRICES HERE (5 founding → 20 early → standard)
 │  └─ polar.js          Polar API client (server-side only)
-├─ vercel.json          Static output = public/, security headers
-├─ package.json         No dependencies — nothing to npm install for the site
-└─ .env.example         The environment variables
+├─ wrangler.toml        project name, compatibility date, output directory
+├─ package.json         wrangler as the only dev dependency
+└─ .dev.vars.example    Environment variables for local development
 ```
 
 ## Download links
@@ -77,17 +80,20 @@ partially refunded orders), so a refunded Founding seat becomes available again.
    before going live.
 2. **Create the product** "ClearDesk Pro":
    * One-time purchase, base price **$19** (checkouts override it per tier).
+   * Visibility **Hidden**, so Polar's own storefront cannot undercut your
+     launch price.
    * **Benefits → New Benefit → License Keys**: prefix `CLEARDESK`, activation
-     limit **2**, no expiration.
+     limit **2**, no expiration, **deactivation via Polar enabled**. Attach it
+     to the product — without it, buyers get no key.
 3. Note the IDs from the dashboard or the API:
    * **Organization ID** — Settings → Organization. You need it for the app.
    * **Product ID** — in the product URL. The site and the app both use it.
    * **Benefit ID** — in the benefit URL. Optional but recommended for the app.
-4. **Create an Organization Access Token** (OAT): Settings → Organization →
-   Access Tokens. This is a secret; it goes only into Vercel.
-5. While testing, either use the **sandbox** environment
-   (https://sandbox.polar.sh, API `https://sandbox-api.polar.sh/v1`) or make a
-   discounted test product in production.
+4. **Create an Organization Access Token** (OAT) with only `orders:read` and
+   `checkouts:write`. This is a secret; it goes only into Cloudflare.
+5. Sandbox and production are separate environments
+   (https://sandbox.polar.sh, API `https://sandbox-api.polar.sh/v1`). A sandbox
+   token is rejected by the production API.
 
 Polar's licence endpoints used by the desktop app need **no token at all**, which
 is why nothing secret ships inside ClearDesk:
@@ -98,70 +104,72 @@ POST https://api.polar.sh/v1/customer-portal/license-keys/validate
 POST https://api.polar.sh/v1/customer-portal/license-keys/deactivate
 ```
 
-## Deploy to Vercel (with getcleardesk.online)
+## Deploy to Cloudflare Pages
 
 1. Push this repository to GitHub (`sfaeer697/cleardesk-web`, `main`).
-2. Go to https://vercel.com → **Add New → Project** → import `cleardesk-web`.
-   * Framework preset: **Other**. Leave the build command and install command empty.
-   * Root directory: the repository root (where `vercel.json` is).
-3. Add these under **Settings → Environment Variables** (Production and Preview):
+2. Cloudflare dashboard → **Workers & Pages → Create → Pages → Connect to Git**
+   → select `cleardesk-web`.
+3. Build settings:
 
-| Variable | Value |
-|---|---|
-| `POLAR_ACCESS_TOKEN` | your Organization Access Token (secret) |
-| `POLAR_ORGANIZATION_ID` | organization UUID |
-| `POLAR_PRODUCT_ID` | product UUID |
-| `SITE_URL` | `https://getcleardesk.online` (or the Vercel URL first) |
-| `POLAR_ENVIRONMENT` | `sandbox` while testing, `production` for launch |
+   | Setting | Value |
+   |---|---|
+   | Framework preset | **None** |
+   | Build command | *(empty)* |
+   | Build output directory | `public` |
 
-   Then click **Deployments → Redeploy** so the functions pick up the values.
-4. **Custom domain:** Settings → Domains → add `getcleardesk.online` and
-   `www.getcleardesk.online`. At your registrar, add the DNS records Vercel
-   shows (usually an `A` record `@ → 76.76.21.21` and a `CNAME` record
-   `www → cname.vercel-dns.com`). HTTPS is automatic.
-5. Set `BUY_URL` in `cleardesk/src/app/core/models.ts` to
-   `https://getcleardesk.online/#pricing` (already set).
+   `functions/` is picked up automatically from the repository root, and
+   `wrangler.toml` already records the output directory and compatibility date.
+4. **Settings → Variables and Secrets** (add to both Production and Preview):
 
-Every `git push` to `main` redeploys automatically once the Vercel project is
+   | Variable | Value |
+   |---|---|
+   | `POLAR_ACCESS_TOKEN` | your OAT — click **Encrypt** so it is a secret |
+   | `POLAR_ORGANIZATION_ID` | organization UUID |
+   | `POLAR_PRODUCT_ID` | product UUID |
+   | `SITE_URL` | `https://getcleardesk.site` |
+   | `POLAR_ENVIRONMENT` | `production` (anything but `sandbox` uses `api.polar.sh`) |
+
+5. **Deployments → Retry deployment** after changing a variable — Functions read
+   bindings at deploy time.
+6. **Custom domains → Set up a domain** → add `getcleardesk.site` and
+   `www.getcleardesk.site`. If the domain is registered with Cloudflare, the DNS
+   records are created for you; otherwise point the nameservers at Cloudflare.
+   HTTPS is automatic.
+7. **Email Routing** → add `support@getcleardesk.site` and forward it to your
+   real inbox. Cloudflare verifies the destination address by email.
+
+Every `git push` to `main` redeploys automatically once the Pages project is
 connected.
 
-### If the deployment returns 500 on every page
+### If `/api/pricing` returns 503 or the page shows `live: false`
 
-`X-Vercel-Error: FUNCTION_INVOCATION_FAILED` on `/` means Vercel is sending the
-request to a serverless function that is failing at startup, not serving
-`public/index.html`. Usually the project is stale or connected to the wrong
-repository. Check, in order:
-
-1. **Settings → General → Root Directory** is empty (repo root, where
-   `vercel.json` is), and **Framework Preset** is **Other**.
-2. **Build & Development Settings** has no build command and no install
-   command. `vercel.json` already sets `outputDirectory` to `public`.
-3. The project is connected to `sfaeer697/cleardesk-web` and the production
-   deployment's commit is the latest `main`.
-4. Add the environment variables, then **Deployments → Redeploy** (functions do
-   not pick up new variables without a redeploy).
-5. If the project has old rewrites or a stale build, create a fresh project from
-   the same repository and move the domain to it.
+1. **Settings → Variables and Secrets** has all three of `POLAR_ACCESS_TOKEN`,
+   `POLAR_ORGANIZATION_ID`, `POLAR_PRODUCT_ID`, for the environment you are
+   looking at (Production vs Preview).
+2. The token has `orders:read`; without it Polar answers `403 insufficient_scope`.
+3. The token matches the environment — a sandbox token fails on `api.polar.sh`.
+4. You redeployed after adding the variables.
 
 ## Test before launch
 
 1. Open the site, check the ladder shows "5 of 5 left", and buy with Polar's
-   test card `4242 4242 4242 4242` in sandbox mode.
+   test card `4242 4242 4242 4242` (sandbox only; in production use a real card
+   and refund it).
 2. Reload and check it shows "4 of 5 left". Paste the emailed key into the app
    and check it says Pro.
 3. Refund the test order in Polar and check the seat comes back.
-4. Switch `POLAR_ENVIRONMENT` to `production`, use production IDs and a
-   production OAT, redeploy, then launch.
 
 ## Preview locally
 
 ```powershell
 cd D:\Indie-Projects\cleardesk-v1\cleardesk-site
-npx serve public          # design only: the pricing ladder uses the default (0 sold)
-# with the real functions:
-npm i -g vercel
-vercel dev                # reads .env.local (copy it from .env.example)
+npm install                 # installs wrangler
+Copy-Item .dev.vars.example .dev.vars   # then paste the real token
+npm run dev                 # http://localhost:8788, Functions included
 ```
+
+Static-only preview without the Functions: `npm run preview` (the page falls
+back to the hard-coded ladder).
 
 ## Things to decide before launch
 
@@ -171,4 +179,4 @@ These are placeholders in the copy. Change any of them:
 * "Use it on 2 computers" (must match the activation limit on the Polar licence-key benefit)
 * "14-day refund"
 * "Made in Karachi" in the footer
-* The support email (`support@getcleardesk.online`) if you use a different one
+* The support email (`support@getcleardesk.site`) if you use a different one

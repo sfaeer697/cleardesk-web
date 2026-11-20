@@ -1,134 +1,125 @@
 # ClearDesk launch checklist
 
-Work top to bottom. The installers are already public; this checklist is about
-the website, payments, the licensed app build and the domain.
+Work top to bottom. The installers are public and the Polar product exists in
+production; what is left is Cloudflare, the domain, the purchase test and one
+app rebuild.
 
 ## 0. Before spending money
 
-- [ ] Confirm Polar can pay out to your country: **Settings → Payouts**.
-- [ ] Decide on the Vercel plan. Hobby is for non-commercial projects; a paid
-      product should use Pro.
-- [ ] Confirm `getcleardesk.online` is available at your registrar.
+- [ ] Confirm Polar can pay out to your country: **Settings → Payouts** (Stripe
+      identity verification complete, not pending).
+- [ ] Buy `getcleardesk.site` — Cloudflare Registrar is the least friction since
+      the site is moving there.
 
 ## 1. Domain and email
 
-- [ ] Buy `getcleardesk.online` at Namecheap.
+- [ ] Register `getcleardesk.site`. If you buy it at Cloudflare Registrar it is
+      added to your account with Cloudflare nameservers already set.
+- [ ] If you bought it elsewhere, change its nameservers to the pair Cloudflare
+      shows in **Overview → Nameservers**.
 - [ ] Click the ICANN verification email if one arrives.
-- [ ] Set up `support@getcleardesk.online` forwarding to your real inbox:
-      **Domain List → Manage → Email Forwarding**.
-- [ ] Send a test email to the support address and confirm it arrives.
+- [ ] Cloudflare → **Email → Email Routing** → enable, then add a custom address
+      `support@getcleardesk.site` forwarding to your real inbox.
+- [ ] Verify the destination address, then send a test email to the support
+      address and confirm it arrives.
 
-## 2. Polar, sandbox first
+## 2. Polar (already done in production)
 
-Polar has a separate **sandbox** environment at https://sandbox.polar.sh. Data,
-tokens and organizations there are isolated from production. Use it for the
-first end-to-end test, then repeat in production.
+Recorded for reference — see `NOTES-polar.md` in the workspace root.
 
-- [ ] Create the organization in sandbox.
-- [ ] **Benefits → New Benefit → License Keys**: prefix `CLEARDESK`,
-      activation limit **2**, no expiration.
-- [ ] Create product **ClearDesk Pro**, one-time, base price **$19**, attach the
-      licence-key benefit.
-- [ ] Collect the **Organization ID**, **Product ID** and **Benefit ID**.
-- [ ] Create an **Organization Access Token** in sandbox.
+- [x] Organization, product and licence-key benefit exist in **production**.
+- [x] Benefit: prefix `CLEARDESK`, 2 activations, no expiry, deactivation
+      enabled, attached to ClearDesk Pro.
+- [ ] Product **visibility → Hidden** (so Polar's storefront cannot sell at $19).
+- [ ] Access token named `ClearDesk site`, scopes `orders:read` +
+      `checkouts:write` only.
 
-## 3. Vercel project
+## 3. Cloudflare Pages project
 
-Create a **fresh** project. Do not reuse the old broken deployment.
+Create a **new** Pages project rather than reusing anything from Vercel.
 
-- [ ] Vercel → **Add New → Project** → import `sfaeer697/cleardesk-web`.
-- [ ] Framework preset: **Other**.
-- [ ] Root directory: repository root.
-- [ ] Build command: empty.
-- [ ] Output directory: `public`.
-- [ ] Install command: empty.
-- [ ] Node.js version: 22.x.
-- [ ] Add environment variables (Production, Preview, Development):
+- [ ] Cloudflare dashboard → **Workers & Pages → Create → Pages →
+      Connect to Git** → `sfaeer697/cleardesk-web`.
+- [ ] Framework preset: **None**.
+- [ ] Build command: leave empty.
+- [ ] Build output directory: `public`.
+- [ ] Node version: not needed (there is no build step).
+- [ ] **Settings → Variables and Secrets**, for Production *and* Preview:
 
   ```text
-  POLAR_ACCESS_TOKEN=...
-  POLAR_ORGANIZATION_ID=...
-  POLAR_PRODUCT_ID=...
-  SITE_URL=https://your-project.vercel.app
-  POLAR_ENVIRONMENT=sandbox
+  POLAR_ACCESS_TOKEN      <the OAT — click Encrypt>
+  POLAR_ORGANIZATION_ID   295bfb69-68e5-4704-9842-9df2fe9cd087
+  POLAR_PRODUCT_ID        73325a41-7ab0-4cdc-a9e9-9783f23cab88
+  SITE_URL                https://getcleardesk.site
+  POLAR_ENVIRONMENT       production
   ```
 
-- [ ] Deploy. Then **Deployments → Redeploy** after changing any variable.
-- [ ] Open `/api/pricing` and confirm it returns `"live": true`.
-- [ ] Confirm the homepage loads with styles and both download buttons work.
+- [ ] Deploy, then **Deployments → Retry deployment** after any variable change.
+- [ ] Open `https://<project>.pages.dev/api/pricing` and confirm
+      `"live": true` and `"sold": 0`.
+- [ ] Confirm the homepage loads with styles, both download buttons work, and
+      `/thanks.html` renders.
 
-## 4. Domain in Vercel
+## 4. Domain in Cloudflare
 
-- [ ] **Settings → Domains** → add `getcleardesk.online` and
-      `www.getcleardesk.online`.
-- [ ] At Namecheap → **Advanced DNS**, add the records Vercel shows. Commonly:
+- [ ] Pages project → **Custom domains** → **Set up a domain** →
+      `getcleardesk.site`.
+- [ ] Add `www.getcleardesk.site` as well and redirect it to the apex under
+      **Rules → Redirect Rules** (or use `www` as the primary and redirect the
+      apex).
+- [ ] Wait for the status to read **Active** and HTTPS to be issued.
+- [ ] Confirm `https://getcleardesk.site/api/pricing` answers, not just the
+      `pages.dev` hostname.
 
-  | Type | Host | Value |
-  |---|---|---|
-  | A | `@` | `76.76.21.21` |
-  | CNAME | `www` | `cname.vercel-dns.com` |
+## 5. Purchase test
 
-- [ ] Delete Namecheap's parking/redirect records for `@` and `www`.
-- [ ] Wait for Vercel to show **Valid Configuration** and issue HTTPS.
-
-## 5. Sandbox purchase test
-
-- [ ] Open the site. The pricing section should show **Founding — $9** and
-      **5 of 5 left**.
-- [ ] Click **Buy**. Polar checkout should open at **$9**.
-- [ ] Pay with card `4242 4242 4242 4242`.
-- [ ] In Polar sandbox → **Orders**, confirm the order and its licence key.
-- [ ] Reload the site after about a minute. It should show **4 of 5 left**.
-- [ ] Refund the order and confirm the seat returns.
+- [ ] Open the site: **Founding — $9**, **5 of 5 left**.
+- [ ] Click **Buy** → Polar checkout at **$9**.
+- [ ] Pay with a real card (production has no test cards).
+- [ ] Polar → **Orders** → confirm the order and its `CLEARDESK_…` licence key.
+- [ ] Reload the site after about a minute: **4 of 5 left**.
+- [ ] Refund the order and confirm the seat returns (could take a minute).
 
 ## 6. Licensed app build
 
-Set the public identifiers (they are not secrets):
-
-```text
-cleardesk/src-tauri/src/license.rs
-```
+`license.rs` already contains the production public identifiers:
 
 ```rust
-pub const ORGANIZATION_ID: &str = "your-org-uuid";
-pub const BENEFIT_ID: &str = "your-licence-benefit-uuid"; // recommended
+pub const ORGANIZATION_ID: &str = "295bfb69-68e5-4704-9842-9df2fe9cd087";
+pub const BENEFIT_ID: &str = "f71236de-196e-4142-8a31-3c905a0e6d1d";
 ```
 
+- [ ] Confirm `src/app/core/models.ts` has `BUY_URL = 'https://getcleardesk.site/#pricing'`.
 - [ ] Bump the version in `package.json`, `src-tauri/tauri.conf.json`,
       `src-tauri/Cargo.toml`; refresh and commit `src-tauri/Cargo.lock`.
 - [ ] Commit, tag, push:
 
   ```powershell
-  git tag v0.1.3
-  git push origin v0.1.3
+  git tag v0.1.4
+  git push origin v0.1.4
   ```
 
-- [ ] Wait for **Release installers** to finish.
-- [ ] Download the new installers and install over the old version.
+- [ ] Wait for **Release installers** (Windows + macOS on `macos-15`).
+- [ ] Confirm all three stable download URLs return 200.
+- [ ] Install over the old version.
 
 ## 7. End-to-end test
 
 - [ ] Free tier: one workspace, 50 items, second workspace blocked.
-- [ ] Buy with the test card; paste the key into **Settings → ClearDesk Pro**.
+- [ ] Paste the key from the test purchase into **Settings → ClearDesk Pro**.
 - [ ] Confirm Pro unlocks unlimited workspaces and items.
 - [ ] Activate on a second computer. A third must fail the activation limit.
 - [ ] Deactivate one computer and activate another.
-- [ ] Refund the test order.
 - [ ] Confirm the packaged UI is styled, not bare HTML.
 
-## 8. Go live
+## 8. Decommission Vercel
 
-- [ ] Switch the dashboard from sandbox to **production**.
-- [ ] Create the product and licence-key benefit in production.
-- [ ] Collect the production **Organization ID**, **Product ID**, **Benefit ID**.
-- [ ] Create a production **Organization Access Token**.
-- [ ] Vercel: replace all values, set `POLAR_ENVIRONMENT=production`, redeploy.
-- [ ] `license.rs`: set the **production** `ORGANIZATION_ID` and `BENEFIT_ID`.
-      Build and release the updated version.
-- [ ] Confirm `/api/pricing` returns `"live": true` with production data.
-- [ ] Make one real purchase, verify activation, then refund it.
-- [ ] Confirm the payout appears in Polar.
-- [ ] Announce.
+Only after `getcleardesk.site` serves the new site.
+
+- [ ] Delete `api/`, `vercel.json` and `vercel.json`'s shims from the repo, or
+      keep `api/` if you want the old deployment to keep working.
+- [ ] Delete the Vercel project so it stops auto-deploying on every push.
+- [ ] Remove the `LEMONSQUEEZY_*` variables if the project still exists.
 
 ## Rules
 
@@ -137,5 +128,7 @@ pub const BENEFIT_ID: &str = "your-licence-benefit-uuid"; // recommended
   Polar's customer-portal licence endpoints are unauthenticated by design.
 - Keep Angular `inlineCritical` disabled; Tauri's CSP blocks its inline
   `onload` handler and the packaged app loses its styles.
-- Set `SITE_URL=https://getcleardesk.online` only after DNS resolves, otherwise
-  the post-purchase redirect breaks.
+- Set `SITE_URL` before the first real sale, otherwise the post-purchase
+  redirect leaves the buyer on Polar.
+- Cloudflare Pages does not cache Function responses at the edge; `/api/pricing`
+  relies on a 60-second in-isolate cache plus a 30-second browser cache.

@@ -4,7 +4,11 @@
   "type": "module",
   "engines": { "node": ">=20" },
   "scripts": {
-    "dev": "vercel dev",
-    "preview": "npx serve public"
+    "dev": "wrangler pages dev",
+    "preview": "npx serve public",
+    "deploy": "wrangler pages deploy"
+  },
+  "devDependencies": {
+    "wrangler": "^4"
   }
 }

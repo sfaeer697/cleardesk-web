@@ -1,0 +1,5 @@
+name = "cleardesk"
+compatibility_date = "2026-11-20"
+
+# Cloudflare Pages: static files come from public/, Functions from functions/.
+pages_build_output_dir = "public"

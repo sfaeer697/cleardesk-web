@@ -9,7 +9,7 @@ const CONFIG = {
     windows: 'https://github.com/sfaeer697/cleardesk-web/releases/latest/download/ClearDesk-Windows-x64-Setup.exe',
     mac: 'https://github.com/sfaeer697/cleardesk-web/releases/latest/download/ClearDesk-macOS-universal.dmg',
   },
-  macWaitlist: 'mailto:support@getcleardesk.online?subject=Tell%20me%20when%20ClearDesk%20for%20Mac%20ships',
+  macWaitlist: 'mailto:support@getcleardesk.site?subject=Tell%20me%20when%20ClearDesk%20for%20Mac%20ships',
   // Shown if /api/pricing can't be reached (e.g. opening the file locally).
   // Keep in sync with lib/tiers.js.
   fallbackTiers: [

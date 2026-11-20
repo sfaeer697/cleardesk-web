@@ -1,3 +1,6 @@
 .vercel
+.wrangler
+.dev.vars*
+!.dev.vars.example
 .env*.local
 node_modules
