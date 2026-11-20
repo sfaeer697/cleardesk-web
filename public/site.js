@@ -36,6 +36,15 @@ function applyOs(os) {
 function setShots(os, animate = false) {
   const stack = $('.shot-stack');
   const swap = () => $$('[data-shot]').forEach((img) => (img.src = `/img/${img.dataset.shot}-${os}.webp`));
+  $$('[data-vshot]').forEach((v) => {
+    const base = `/img/${v.dataset.vshot}-${os}`;
+    if (v.dataset.os === os) return;
+    v.dataset.os = os;
+    v.poster = `${base}-poster.jpg`;
+    v.querySelectorAll('source').forEach((src) => (src.src = `${base}.${src.type.split('/')[1]}`));
+    v.load();
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) v.play().catch(() => {});
+  });
   if (animate && stack) {
     stack.classList.add('swap');
     setTimeout(() => { swap(); stack.classList.remove('swap'); }, 260);
@@ -71,7 +80,7 @@ const REVEAL = [
   '.compare .eyebrow', '.compare h2', '.table-scroll',
   '.privacy-in > div', '.pgrid li',
   '.pricing .eyebrow', '.pricing h2', '.pricing .lead', '.tier', '.buy-card',
-  '.faq .eyebrow', '.faq h2', '.faq details', '.final-in > *',
+  '.faq .eyebrow', '.faq h2', '.final-in > *',
 ];
 
 function setupMotion() {
@@ -215,13 +224,42 @@ document.addEventListener('DOMContentLoaded', () => {
   void loadPricing();
 });
 
-// Hero demo loop: respect reduced motion (show controls instead of autoplay).
-document.addEventListener('DOMContentLoaded', () => {
-  const v = document.querySelector('.demo-video');
+// ---------- Demo videos ----------
+const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// If the hero loop cannot be decoded, show its poster instead of an empty box.
+function setupHeroVideo() {
+  const v = $('.demo-video');
   if (!v) return;
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  const fallback = () => {
+    if ($('.demo-fallback')) return;
+    const img = new Image();
+    img.className = 'demo-video demo-fallback';
+    img.src = v.poster;
+    img.alt = v.getAttribute('aria-label') || 'ClearDesk demo';
+    v.replaceWith(img);
+  };
+  if (v.error) return fallback();
+  // A `<video>` only reports an error once every `<source>` has failed, and
+  // source-level errors do not bubble, so watch the last source as well.
+  const sources = $$('source', v);
+  const last = sources[sources.length - 1];
+  if (last) last.addEventListener('error', fallback, { once: true });
+  v.addEventListener('error', fallback, { once: true });
+  if (reducedMotion) {
     v.removeAttribute('autoplay');
     v.pause();
     v.controls = true;
   }
+}
+
+// Reduced motion: keep the quick-panel loop as a still poster frame.
+function setupPanelVideo() {
+  if (!reducedMotion) return;
+  $$('video[data-vshot]').forEach((v) => { v.removeAttribute('autoplay'); v.pause(); });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  setupHeroVideo();
+  setupPanelVideo();
 });
