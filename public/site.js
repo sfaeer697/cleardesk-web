@@ -43,7 +43,12 @@ function setShots(os, animate = false) {
     v.poster = `${base}-poster.jpg`;
     v.querySelectorAll('source').forEach((src) => (src.src = `${base}.${src.type.split('/')[1]}`));
     v.load();
-    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) v.play().catch(() => {});
+    // Only start it if the visitor can actually see it; otherwise the
+    // in-view observer below starts it on scroll.
+    const b = v.getBoundingClientRect();
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches && b.bottom > 0 && b.top < innerHeight) {
+      v.play().catch(() => {});
+    }
   });
   if (animate && stack) {
     stack.classList.add('swap');
@@ -253,10 +258,25 @@ function setupHeroVideo() {
   }
 }
 
-// Reduced motion: keep the quick-panel loop as a still poster frame.
+// Reduced motion: keep the quick-panel loop as a still poster frame. In motion,
+// autoplay runs it, but the observer pauses it while it is off-screen so it is
+// not decoding in the background.
 function setupPanelVideo() {
-  if (!reducedMotion) return;
-  $$('video[data-vshot]').forEach((v) => { v.removeAttribute('autoplay'); v.pause(); });
+  const v = $('video[data-vshot]');
+  if (!v) return;
+  if (reducedMotion) {
+    v.removeAttribute('autoplay');
+    v.pause();
+    return;
+  }
+  if (!('IntersectionObserver' in window)) return;
+  const io = new IntersectionObserver((entries) => {
+    for (const e of entries) {
+      if (e.isIntersecting) v.play().catch(() => {});
+      else v.pause();
+    }
+  }, { threshold: 0.15 });
+  io.observe(v);
 }
 
 document.addEventListener('DOMContentLoaded', () => {

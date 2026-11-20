@@ -19,6 +19,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/styles.css">
+  <link rel="preload" as="image" href="/img/hero-demo-poster.jpg" fetchpriority="high">
   <script src="/site.js" defer></script>
 </head>
 <body>
@@ -121,7 +122,7 @@
               <li>Drag any result straight into mail, chat or a folder</li>
             </ul>
           </div>
-          <video class="fh-img" data-vshot="panel-loop" autoplay loop muted playsinline preload="metadata" width="1200" height="840" poster="/img/panel-loop-win-poster.jpg" aria-label="Pressing the shortcut over an email draft opens the ClearDesk quick panel. Typing “bri” finds Chris_Brief_v2.pdf, Space previews it, and the file is dragged straight into the email as an attachment.">
+          <video class="fh-img" data-vshot="panel-loop" data-os="win" autoplay loop muted playsinline preload="metadata" width="1200" height="840" poster="/img/panel-loop-win-poster.jpg" aria-label="Pressing the shortcut over an email draft opens the ClearDesk quick panel. Typing “bri” finds Chris_Brief_v2.pdf, Space previews it, and the file is dragged straight into the email as an attachment.">
             <source src="/img/panel-loop-win.webm" type="video/webm">
             <source src="/img/panel-loop-win.mp4" type="video/mp4">
           </video>
